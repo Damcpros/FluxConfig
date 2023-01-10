@@ -1,3 +1,2 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
-task.wait(0.1)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Damcpros/FluxConfig/main/module", true))()
+if not game:IsLoaded() then repeat task.wait() until game:IsLoaded()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Damcpros/FluxConfig/main/loader", true))()
