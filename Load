@@ -1,0 +1,120 @@
+local Moon = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextLabel = Instance.new("TextLabel")
+local Frame_2 = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+local TextButton_2 = Instance.new("TextButton")
+
+Moon.Name = "Moon"
+Moon.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Moon.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = Moon
+Frame.BackgroundColor3 = Color3.fromRGB(54, 54, 54)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.1369863, 0, 0.259259254, 0)
+Frame.Size = UDim2.new(0, 668, 0, 390)
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.0119760484, 0, -0.012820513, 0)
+TextLabel.Size = UDim2.new(0, 161, 0, 58)
+TextLabel.ZIndex = 2
+TextLabel.Font = Enum.Font.SourceSansBold
+TextLabel.Text = "Moon 4.0"
+TextLabel.TextColor3 = Color3.fromRGB(191, 0, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
+
+Frame_2.Parent = Frame
+Frame_2.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_2.BorderSizePixel = 0
+Frame_2.Size = UDim2.new(0, 668, 0, 49)
+
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(39, 39, 39)
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0.0119760484, 0, 0.184615389, 0)
+TextBox.Size = UDim2.new(0, 539, 0, 260)
+TextBox.Font = Enum.Font.SourceSans
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 24.000
+TextBox.TextXAlignment = Enum.TextXAlignment.Left
+TextBox.TextYAlignment = Enum.TextYAlignment.Top
+
+TextButton.Parent = Frame
+TextButton.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.0119760484, 0, 0.876923084, 0)
+TextButton.Size = UDim2.new(0, 161, 0, 33)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Execute"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.TextScaled = true
+TextButton.TextSize = 14.000
+TextButton.TextWrapped = true
+
+TextButton_2.Parent = Frame
+TextButton_2.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+TextButton_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_2.BorderSizePixel = 0
+TextButton_2.Position = UDim2.new(0.28592813, 0, 0.876923084, 0)
+TextButton_2.Size = UDim2.new(0, 161, 0, 33)
+TextButton_2.Font = Enum.Font.SourceSans
+TextButton_2.Text = "Clear"
+TextButton_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_2.TextScaled = true
+TextButton_2.TextSize = 14.000
+TextButton_2.TextWrapped = true
+
+local function LRCJZ_fake_script() -- TextButton.LocalScript 
+	local script = Instance.new('LocalScript', TextButton)
+
+	script.Parent.MouseButton1Down:Connect(function()
+		local func = loadstring(script.Parent.Parent.TextBox.Text)
+		func()
+	end)
+end
+coroutine.wrap(LRCJZ_fake_script)()
+local function BXFEP_fake_script() -- TextButton_2.LocalScript 
+	local script = Instance.new('LocalScript', TextButton_2)
+
+	script.Parent.MouseButton1Down:Connect(function()
+		script.Parent.Parent.TextBox = ""
+	end)
+end
+coroutine.wrap(BXFEP_fake_script)()
+local function TRMYLVL_fake_script() -- Moon.LocalScript 
+	local script2 = Instance.new('LocalScript', Moon)
+
+	for i,v in pairs(script.Parent.Frame:GetDescendants()) do
+		if v:IsA("TextButton") then
+			local clr = v.BackgroundColor3
+			v.MouseEnter:Connect(function()
+				v.BackgroundColor3 = Color3.fromRGB(115, 1, 255)
+			end)
+			v.MouseLeave:Connect(function()
+				v.BackgroundColor3 = clr
+			end)
+		end
+	end
+	
+	script.Parent.Name = math.random()
+	game.UserInputService.InputBegan:Connect(function(key,gpe)
+		if gpe then return end
+		if key.KeyCode == Enum.KeyCode.End then
+			script.Parent.Frame.Visible = not script.Parent.Frame.Visible
+		end
+	end)
+end
+coroutine.wrap(TRMYLVL_fake_script)()
