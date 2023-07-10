@@ -81,7 +81,7 @@ local function LRCJZ_fake_script() -- TextButton.LocalScript
 	local script = Instance.new('LocalScript', TextButton)
 
 	script.Parent.MouseButton1Down:Connect(function()
-		local func = loadstring(script.Parent.Parent.TextBox.Text)
+		local func = loadstring(TextBox.Text)
 		func()
 	end)
 end
@@ -90,14 +90,14 @@ local function BXFEP_fake_script() -- TextButton_2.LocalScript
 	local script = Instance.new('LocalScript', TextButton_2)
 
 	script.Parent.MouseButton1Down:Connect(function()
-		script.Parent.Parent.TextBox = ""
+		TextBox = ""
 	end)
 end
 coroutine.wrap(BXFEP_fake_script)()
 local function TRMYLVL_fake_script() -- Moon.LocalScript 
 	local script2 = Instance.new('LocalScript', Moon)
 
-	for i,v in pairs(script.Parent.Frame:GetDescendants()) do
+	for i,v in pairs(Frame:GetDescendants()) do
 		if v:IsA("TextButton") then
 			local clr = v.BackgroundColor3
 			v.MouseEnter:Connect(function()
@@ -108,11 +108,11 @@ local function TRMYLVL_fake_script() -- Moon.LocalScript
 			end)
 		end
 	end
-	
-	script.Parent.Name = math.random()
+
+	Moon = math.random()
 	game.UserInputService.InputBegan:Connect(function(key,gpe)
 		if gpe then return end
-		if key.KeyCode == Enum.KeyCode.N then
+		if key.KeyCode == Enum.KeyCode.End then
 			script.Parent.Frame.Visible = not script.Parent.Frame.Visible
 		end
 	end)
