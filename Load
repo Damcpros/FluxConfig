@@ -113,7 +113,7 @@ local function TRMYLVL_fake_script() -- Moon.LocalScript
 	game.UserInputService.InputBegan:Connect(function(key,gpe)
 		if gpe then return end
 		if key.KeyCode == Enum.KeyCode.End then
-			Frame = not Frame
+			Frame.Visible = not Frame.Visible
 		end
 	end)
 end
